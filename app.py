@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flaskext.markdown import Markdown
 
@@ -32,9 +32,9 @@ def create_app():
 
     @app.route("/notifications", methods=["GET"])
     @auto_docs.doc()
-    def notifications_get():
+    def list_notifications():
         """
-Get notifications
+Get a List of Notifications
 =================
 
 > this is a codeblock
@@ -43,18 +43,38 @@ this is an _em_.
 
 Form data: test
 
+URL Params:
+
+valid, boolean, defaults to true -- filter out notifications that are ahead of the current time
+
+removeImportant, boolean, defaults to false -- remove notifications that are important
+
+max, integer, defaults to 5 -- the amount of notifications to be returned
+
+Will also return a requestParams dict with parameters used.
+
 ```
 this is code
 ```
         """
-        valid = []
-        currentTime = datetime.now()
-        for i in notifications.query.filter_by(timestamp=None).all() + notifications.query.filter(notifications.timestamp!=None).order_by(notifications.timestamp).all():
-            #.limit(4)
-            """if i.timestamp and i.timestamp > currentTime: #TODO: Add this to the query instead
-                continue"""
-            valid.append(dict(i))
-        return jsonify(success=True, valid=valid)
+        notifs = notifications.query.all()
+        requestParams = {}
+
+        requestParams["valid"] = request.args.get("valid", default=True, type=bool)
+        if requestParams["valid"]:
+            notifs = [i for i in notifs if (i.timestamp == None) or (i.timestamp < datetime.now())]
+
+        requestParams["removeImportant"] = request.args.get("removeImportant", default=False, type=bool)
+        if requestParams["removeImportant"]:
+            notifs = [i for i in notifs if not i.important]
+        
+        requestParams["maximum"] = request.args.get("max", default=5, type=int)
+        notifs = notifs[:requestParams["maximum"]]
+
+        notifs = [dict(i) for i in notifs]
+        success = True
+
+        return jsonify(**locals())
 
     return app
 

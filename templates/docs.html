@@ -4,12 +4,12 @@
 
 {% block content -%}
     {% set badges = {"GET": "info", "DELETE": "danger", "PUT": "warning", "POST": "success", "PATCH": "primary"} -%}
-    {% for doc in autodoc -%}
-    <div style="border: 1px solid black;">
+    {%- for doc in autodoc %}
+    <div class="my-2" style="border: 1px solid black;">
         <div class="row">
             <div class="col">
                 <h2 style="margin-bottom: 0;">{{ doc.endpoint }}</h2>
-                <a href="{{ doc.rule }}">{{ doc.rule }}</a>
+                <a href="{{ doc.rule }}" target="_blank">{{ doc.rule }} <i class="fas fa-external-link-alt align-text-top" style="font-size: 0.5rem"></i></a>
             </div>
             <div class="col d-flex justify-content-end">
                 {%- for method in doc.methods %}
@@ -19,15 +19,9 @@
                 {%- endfor %}
             </div>
         </div>
+        {%- if doc.docstring %}
         <small class="text-muted">Info:</small>
         {{ doc.docstring | markdown }}
-        {%- if len(doc.args) > 0 and doc.args[0] != "None" %}
-        <h3>Arguments:</h3>
-        <ul>
-            {%- for arg in doc.args %}
-            <li>{{ arg }} default={{ doc.defaults[arg] }}</li>
-            {%- endfor %}
-        </ul>
         {%- endif %}
     </div>
     {%- endfor %}

@@ -29,6 +29,18 @@ def create_app():
     auto_docs.init_app(app)
     app.register_blueprint(docs_blueprint)
 
+    #Error Handlers
+    @app.errorhandler(404)
+    def not_found(description):
+        error = 404
+        description = str(description)
+        return jsonify(**locals()), error
+    @app.errorhandler(500)
+    def not_found(description):
+        error = 500
+        description = str(description)
+        return jsonify(**locals()), error
+
     @app.route("/")
     def index():
         return jsonify({"success": True})

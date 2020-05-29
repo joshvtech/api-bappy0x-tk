@@ -21,7 +21,7 @@
         </div>
         {%- if doc.docstring %}
         <small class="text-muted">Info:</small>
-        {{ doc.docstring | markdown }}
+        {{- doc.docstring | safe }}
         {%- endif %}
     </div>
     {%- endfor %}

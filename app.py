@@ -1,6 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template_string
 from flask_cors import CORS
-from flaskext.markdown import Markdown
 
 from os.path import join
 
@@ -13,14 +12,13 @@ from db.models import *
 def create_app():
     app = Flask(__name__)
 
-    app.jinja_env.globals.update(len=len)
+    app.jinja_env.globals.update(len=len, render_template_string=render_template_string)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
     CORS(app)
-    Markdown(app)
 
     from views.notifications import blueprint as notifications_blueprint
     app.register_blueprint(notifications_blueprint)

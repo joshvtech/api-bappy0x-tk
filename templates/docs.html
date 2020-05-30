@@ -5,7 +5,7 @@
 {% block content -%}
     {% set badges = {"GET": "info", "DELETE": "danger", "PUT": "warning", "POST": "success", "PATCH": "primary"} -%}
     {%- for doc in autodoc %}
-    <div class="my-2" style="border: 1px solid black;">
+    <div class="my-2">
         <div class="row">
             <div class="col">
                 <h2 style="margin-bottom: 0;">{{ doc.endpoint }}</h2>
@@ -21,8 +21,9 @@
         </div>
         {%- if doc.docstring %}
         <small class="text-muted">Info:</small>
-        {{- doc.docstring | safe }}
-        {%- endif %}
+        {{- render_template_string(doc.docstring) | safe }}
+        {%- endif -%}
     </div>
+    <hr>
     {%- endfor %}
 {%- endblock %}

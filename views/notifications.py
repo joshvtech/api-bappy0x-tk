@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort
 
 from .docs import auto_docs
 
@@ -13,55 +13,119 @@ blueprint = Blueprint("notifications", __name__, url_prefix="/notifications")
 @blueprint.route("/<int:id>", methods=["GET"])
 @auto_docs.doc()
 def from_id(id):
-    return jsonify(success=id)
+    """
+        <h3>Get a Notification by its ID</h3>
+        <p>Each notification has an ID - use this method to get it.</p>
+        <h4>Notification Values:</h4>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Type</td>
+                <td>Maximum Value</td>
+                <td>Example</td>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>integer</td>
+                <td>N/A</td>
+                <td><code>3</code></td>
+            </tr>
+            <tr>
+                <td>important</td>
+                <td>boolean</td>
+                <td>N/A</td>
+                <td><code>true</code></td>
+            </tr>
+            <tr>
+                <td>timestamp</td>
+                <td>datetime or null</td>
+                <td>N/A</td>
+                <td><code>"Sat, 09 May 2020 22:20:00 GMT"</code></td>
+            </tr>
+            <tr>
+                <td>head</td>
+                <td>string</td>
+                <td>128 Characters</td>
+                <td><code>"&lti class=\\"fas fa-tools\\"&gt&lt/i&gt This site is still under construction..."</code></td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>string</td>
+                <td>512 Characters</td>
+                <td><code>"Please note that I am still building this site as you view it, this constantly gets updated and changed."</code></td>
+            </tr>
+        </table>
+        <br>
+        <h4>Examples:</h4>
+        <p>Raw URL:</p>
+        <a href="{{ url_for('notifications.from_id', id=3) }}" target="_blank">https://{{ request.host }}{{ url_for("notifications.from_id", id=3) }} <i class="fas fa-external-link-alt align-text-top" style="font-size: 0.5rem"></i></a>
+        <p>cURL Example:</p>
+        <code>
+            curl -X GET "https://{{ request.host }}/notifications/3"
+        </code>
+        <br>
+        <p>Python Example:</p>
+        <code>
+            import requests<br>
+            response = requests.get("https://{{ request.host }}/notifications/3")<br>
+            print(response.json())<br>
+        </code>
+    """
+    result = notifications.query.get(id)
+    if result is None:
+        return abort(404)
+    result = dict(result)
+    success = True
+    return jsonify(**locals())
 
 @blueprint.route("/list", methods=["GET"])
 @auto_docs.doc()
 def list():
     """
-<h3>Get a List of Notifications</h3>
-
-<table>
-    <tr>
-        <td>Name</td>
-        <td>Type</td>
-        <td>Default</td>
-        <td>Description</td>
-    </tr>
-    <tr>
-        <td>valid</td>
-        <td>boolean</td>
-        <td>true</td>
-        <td>Filter out notifications that are ahead of the current time.</td>
-    </tr>
-    <tr>
-        <td>removeImportant</td>
-        <td>boolean</td>
-        <td>False</td>
-        <td>Remove notifications that are important.</td>
-    </tr>
-    <tr>
-        <td>max</td>
-        <td>integer</td>
-        <td>5</td>
-        <td>The amount of notifications to be returned.</td>
-    </tr>
-</table>
-<br>
-<p>cURL Example:</p>
-
-<code>
-    curl -X GET "https://api.bappy0x.tk/notifications/list" -d valid=True -d removeImportant=False -d max=5
-</code>
-<br>
-
-<p>Python Example:</p>
-
-<code>
-    import requests<br>
-    response = requests.get("http://localhost/notifications/list", params={"valid": True, "removeImportant": False, "max": 3})<br>
-    print(response.json())<br>
-</code>
+        <h3>Get a Full List of Notifications</h3>
+        <h4>URL Parameters:</h4>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Type</td>
+                <td>Default</td>
+                <td>Description</td>
+            </tr>
+            <tr>
+                <td>valid</td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Filter out notifications that are ahead of the current time.</td>
+            </tr>
+            <tr>
+                <td>removeImportant</td>
+                <td>boolean</td>
+                <td>False</td>
+                <td>Remove notifications that are important.</td>
+            </tr>
+            <tr>
+                <td>max</td>
+                <td>integer</td>
+                <td>5</td>
+                <td>The amount of notifications to be returned.</td>
+            </tr>
+        </table>
+        <p>These are also stored in a "requestParams" object within the JSON response.</p>
+        <br>
+        <h4>Examples:</h4>
+        <p>Raw URL:</p>
+        <a href="{{ url_for('notifications.list') }}?valid=True&removeImportant=False&max=5" target="_blank">https://{{ request.host }}{{ url_for('notifications.list') }}?valid=True&removeImportant=False&max=5 <i class="fas fa-external-link-alt align-text-top" style="font-size: 0.5rem"></i></a>
+        <p>cURL Example:</p>
+        <code>
+            curl -X GET "https://{{ request.host }}/notifications/list" -d valid=True -d removeImportant=False -d max=5
+        </code>
+        <br>
+        <p>Python Example:</p>
+        <code>
+            import requests<br>
+            response = requests.get("https://{{ request.host }}/notifications/list", params={"valid": True, "removeImportant": False, "max": 3})<br>
+            print(response.json())<br>
+        </code>
     """
     #Define the request paramaters as a dict and query SQL for all notifications.
     requestParams = {

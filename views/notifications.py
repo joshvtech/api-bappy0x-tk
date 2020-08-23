@@ -16,44 +16,48 @@ def from_id(id):
     """
         <h3>Get a Notification by its ID</h3>
         <p>Each notification has an ID - use this method to get it.</p>
-        <h4>Notification Values:</h4>
-        <table>
-            <tr>
-                <td>Name</td>
-                <td>Type</td>
-                <td>Maximum Value</td>
-                <td>Example</td>
-            </tr>
-            <tr>
-                <td>id</td>
-                <td>integer</td>
-                <td>N/A</td>
-                <td><code>3</code></td>
-            </tr>
-            <tr>
-                <td>important</td>
-                <td>boolean</td>
-                <td>N/A</td>
-                <td><code>true</code></td>
-            </tr>
-            <tr>
-                <td>timestamp</td>
-                <td>datetime or null</td>
-                <td>N/A</td>
-                <td><code>"Sat, 09 May 2020 22:20:00 GMT"</code></td>
-            </tr>
-            <tr>
-                <td>head</td>
-                <td>string</td>
-                <td>128 Characters</td>
-                <td><code>"&lti class=\\"fas fa-tools\\"&gt&lt/i&gt This site is still under construction..."</code></td>
-            </tr>
-            <tr>
-                <td>body</td>
-                <td>string</td>
-                <td>512 Characters</td>
-                <td><code>"Please note that I am still building this site as you view it, this constantly gets updated and changed."</code></td>
-            </tr>
+        <h4>Response Notification Object Values:</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Maximum Value</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>N/A</td>
+                    <td><code>3</code></td>
+                </tr>
+                <tr>
+                    <td>important</td>
+                    <td>boolean</td>
+                    <td>N/A</td>
+                    <td><code>true</code></td>
+                </tr>
+                <tr>
+                    <td>timestamp</td>
+                    <td>datetime or null</td>
+                    <td>N/A</td>
+                    <td><code>"Sat, 09 May 2020 22:20:00 GMT"</code></td>
+                </tr>
+                <tr>
+                    <td>head</td>
+                    <td>string</td>
+                    <td>128 Characters</td>
+                    <td><code>"&lti class=\\"fas fa-tools\\"&gt&lt/i&gt This site is still under construction..."</code></td>
+                </tr>
+                <tr>
+                    <td>body</td>
+                    <td>string</td>
+                    <td>512 Characters</td>
+                    <td><code>"Please note that I am still building this site as you view it, this constantly gets updated and changed."</code></td>
+                </tr>
+            </tbody>
         </table>
         <br>
         <h4>Examples:</h4>
@@ -83,32 +87,36 @@ def from_id(id):
 def list():
     """
         <h3>Get a Full List of Notifications</h3>
-        <h4>URL Parameters:</h4>
-        <table>
-            <tr>
-                <td>Name</td>
-                <td>Type</td>
-                <td>Default</td>
-                <td>Description</td>
-            </tr>
-            <tr>
-                <td>valid</td>
-                <td>boolean</td>
-                <td>true</td>
-                <td>Filter out notifications that are ahead of the current time.</td>
-            </tr>
-            <tr>
-                <td>removeImportant</td>
-                <td>boolean</td>
-                <td>False</td>
-                <td>Remove notifications that are important.</td>
-            </tr>
-            <tr>
-                <td>max</td>
-                <td>integer</td>
-                <td>5</td>
-                <td>The amount of notifications to be returned.</td>
-            </tr>
+        <h4>Request URL Parameters:</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>valid</td>
+                    <td>boolean</td>
+                    <td>true</td>
+                    <td>Filter out notifications that are ahead of the current time.</td>
+                </tr>
+                <tr>
+                    <td>removeImportant</td>
+                    <td>boolean</td>
+                    <td>False</td>
+                    <td>Remove notifications that are important.</td>
+                </tr>
+                <tr>
+                    <td>max</td>
+                    <td>integer</td>
+                    <td>5</td>
+                    <td>The amount of notifications to be returned.</td>
+                </tr>
+            </tbody>
         </table>
         <p>These are also stored in a "requestParams" object within the JSON response.</p>
         <br>

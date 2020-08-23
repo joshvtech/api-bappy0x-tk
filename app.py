@@ -23,8 +23,8 @@ def create_app():
     from views.notifications import blueprint as notifications_blueprint
     app.register_blueprint(notifications_blueprint)
 
-    from views.jetradiovwr import blueprint as jetradiovwr_blueprint
-    app.register_blueprint(jetradiovwr_blueprint)
+    from views.jetradio import blueprint as jetradio_blueprint
+    app.register_blueprint(jetradio_blueprint)
 
     from views.docs import auto_docs, blueprint as docs_blueprint
     auto_docs.init_app(app)

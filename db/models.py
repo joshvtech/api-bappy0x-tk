@@ -2,7 +2,6 @@ from flask import Markup, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime
-from humanize import naturaltime
 
 db = SQLAlchemy()
 

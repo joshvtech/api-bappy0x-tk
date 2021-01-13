@@ -4,7 +4,7 @@ from .docs import auto_docs
 
 from sys import path
 path.append("...")
-from db.models import notifications
+from db.models import tblNotifications
 
 from datetime import datetime
 
@@ -75,7 +75,7 @@ def from_id(id):
             print(response.json())<br>
         </code>
     """
-    result = notifications.query.get(id)
+    result = tblNotifications.query.get(id)
     if result is None:
         return abort(404)
     result = dict(result)
@@ -141,7 +141,7 @@ def list():
         "removeImportant": request.args.get("removeImportant", default=False, type=bool),
         "max":             request.args.get("max", default=5, type=int)
     }
-    notifs = notifications.query.all()
+    notifs = tblNotifications.query.all()
 
     #Filter depending on params
     if requestParams["valid"]:

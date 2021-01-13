@@ -1,12 +1,11 @@
 from flask import Blueprint, request, jsonify, abort
-
 from .docs import auto_docs
-from os import getenv
 
 from sys import path
 path.append("...")
-from db.models import jetradio_events as events
+from db.models import tblJetradio_events
 
+from os import getenv
 from requests import post
 from datetime import datetime, timezone
 
@@ -171,7 +170,7 @@ def current_event():
         </code>
     """
     timeNow = datetime.utcnow().replace(tzinfo=timezone.utc)
-    active = [i for i in events.query.all() if i.timeStart <= timeNow and i.timeEnd > timeNow]
+    active = [i for i in tblJetradio_events.query.all() if i.timeStart <= timeNow and i.timeEnd > timeNow]
     event = None
     if len(active) > 0: event = dict(active[0])
     del active

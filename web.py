@@ -32,6 +32,12 @@ def create_app():
     app.register_blueprint(docs_blueprint)
 
     #Error Handlers
+    @app.errorhandler(403)
+    def not_found(description):
+        error = 403
+        description = str(description)
+        return jsonify(**locals()), error
+
     @app.errorhandler(404)
     def not_found(description):
         error = 404

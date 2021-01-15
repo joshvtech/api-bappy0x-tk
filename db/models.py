@@ -1,7 +1,9 @@
 from flask import Markup, render_template_string
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from datetime import datetime
+from uuid import uuid4
 
 db = SQLAlchemy()
 
@@ -26,12 +28,40 @@ class tblNotifications(db.Model):
 class tblVxTech_bank(db.Model):
     __tablename__ = "tblVxTech-bank"
     id = db.Column(db.Integer, primary_key=True)
+    placeId = db.Column(db.Integer)
+    userId = db.Column(db.Integer)
+    balance = db.Column(db.Float, default=0)
 
     def __iter__(self):
         yield "id", self.id
+        yield "placeId", self.placeId
+        yield "userId", self.userId
+        yield "balance", self.balance
 
     def __repr__(self):
         return(f"<VxTech Bank # {self.id}>")
+
+class tblVxTech_tokens(db.Model):
+    __tablename__ = "tblVxTech-tokens"
+    token = db.Column(db.String(128), primary_key=True)
+    placeId = db.Column(db.Integer)
+    
+    def generateToken(self):
+        tok = uuid4().hex
+        print(tok)
+        self.token = generate_password_hash(tok, method="sha256")
+    def checkToken(self, pwd):
+        print(pwd)
+        return check_password_hash(self.token, pwd)
+
+    def __iter__(self):
+        yield "id", self.id
+        yield "placeId", self.placeId
+        yield "userId", self.userId
+        yield "balance", self.balance
+
+    def __repr__(self):
+        return(f"<VxTech Token # {self.placeId}>")
 
 class tblJetradio_events(db.Model):
     __tablename__ = "tblJetradio-events"
